@@ -1,0 +1,113 @@
+name: MindEcho CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:      # 允许手动触发
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================================
+  # Job 1: Swift 编译 + 测试 (macOS)
+  # ============================================================
+  build-and-test:
+    name: Build & Test
+    runs-on: macos-14        # Apple Silicon M1, macOS Sonoma+
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+          xcodebuild -version
+          swift --version
+
+      - name: Cache Swift Packages
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.swift', 'Package.resolved') }}
+          restore-keys: ${{ runner.os }}-spm-
+
+      - name: Resolve Dependencies
+        run: swift package resolve
+
+      - name: Build (macOS)
+        run: |
+          swift build \
+            --configuration debug \
+            --verbose 2>&1 | tee build.log
+
+      - name: Run Tests
+        run: |
+          swift test \
+            --configuration debug \
+            --verbose 2>&1 | tee test.log
+
+      - name: Upload Build Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            build.log
+            test.log
+          retention-days: 7
+
+  # ============================================================
+  # Job 2: 代码质量检查
+  # ============================================================
+  lint:
+    name: Lint
+    runs-on: macos-14
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run SwiftLint
+        run: |
+          if [ -f .swiftlint.yml ]; then
+            swiftlint --reporter github-actions-logging
+          else
+            echo "No .swiftlint.yml found, skipping lint"
+          fi
+
+  # ============================================================
+  # Job 3: 生成 API 文档 (可选)
+  # ============================================================
+  docs:
+    name: Generate Docs
+    runs-on: macos-14
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate DocC Documentation
+        run: |
+          swift package generate-documentation \
+            --target MindEchoCore \
+            --output-path docs/api \
+            --disable-indexing 2>&1 || echo "DocC not configured yet"
+
+      - name: Upload Documentation
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-docs
+          path: docs/api/
+          retention-days: 7

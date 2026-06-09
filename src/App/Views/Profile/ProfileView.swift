@@ -1,14 +1,14 @@
-import SwiftUI
+﻿import SwiftUI
+import MindEchoCore
 
-/// 个人中心
+/// 涓汉涓績
 struct ProfileView: View {
     @State private var showingEditProfile = false
 
     var body: some View {
         NavigationStack {
             List {
-                // 头像与基本信息
-                Section {
+                // 澶村儚涓庡熀鏈俊鎭?                Section {
                     HStack(spacing: 16) {
                         AsyncImage(url: nil) { image in
                             image.resizable()
@@ -24,7 +24,7 @@ struct ProfileView: View {
                         .clipShape(Circle())
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("用户名")
+                            Text("鐢ㄦ埛鍚?)
                                 .font(.headline)
                             Text("dev@mindecho.local")
                                 .font(.caption)
@@ -32,7 +32,7 @@ struct ProfileView: View {
                         }
 
                         Spacer()
-                        Button("编辑") {
+                        Button("缂栬緫") {
                             showingEditProfile = true
                         }
                         .buttonStyle(.bordered)
@@ -41,59 +41,58 @@ struct ProfileView: View {
                     .padding(.vertical, 4)
                 }
 
-                // 学习设置
-                Section("学习设置") {
+                // 瀛︿範璁剧疆
+                Section("瀛︿範璁剧疆") {
                     HStack {
-                        Text("学习方向")
+                        Text("瀛︿範鏂瑰悜")
                         Spacer()
-                        Text("计算机科学")
+                        Text("璁＄畻鏈虹瀛?)
                             .foregroundColor(.secondary)
                     }
                     HStack {
-                        Text("目标考试")
+                        Text("鐩爣鑰冭瘯")
                         Spacer()
-                        Text("未设置")
+                        Text("鏈缃?)
                             .foregroundColor(.secondary)
                     }
                 }
 
-                // 数据管理
-                Section("数据管理") {
-                    Button("导出数据") {}
-                    Button("同步到云端") {}
-                    Button("清除缓存") {}
+                // 鏁版嵁绠＄悊
+                Section("鏁版嵁绠＄悊") {
+                    Button("瀵煎嚭鏁版嵁") {}
+                    Button("鍚屾鍒颁簯绔?) {}
+                    Button("娓呴櫎缂撳瓨") {}
                         .foregroundColor(.orange)
                 }
 
-                // 系统设置
-                Section("系统设置") {
-                    Toggle("深色模式", isOn: .constant(false))
-                    Toggle("离线模式", isOn: .constant(false))
-                    NavigationLink("无障碍设置") {}
-                    NavigationLink("隐私设置") {}
+                // 绯荤粺璁剧疆
+                Section("绯荤粺璁剧疆") {
+                    Toggle("娣辫壊妯″紡", isOn: .constant(false))
+                    Toggle("绂荤嚎妯″紡", isOn: .constant(false))
+                    NavigationLink("鏃犻殰纰嶈缃?) {}
+                    NavigationLink("闅愮璁剧疆") {}
                 }
 
-                // 关于
-                Section("关于") {
+                // 鍏充簬
+                Section("鍏充簬") {
                     HStack {
-                        Text("版本")
+                        Text("鐗堟湰")
                         Spacer()
                         Text("1.0.0")
                             .foregroundColor(.secondary)
                     }
-                    NavigationLink("用户协议") {}
-                    NavigationLink("隐私政策") {}
+                    NavigationLink("鐢ㄦ埛鍗忚") {}
+                    NavigationLink("闅愮鏀跨瓥") {}
                 }
 
-                // 退出登录
-                Section {
-                    Button("退出登录", role: .destructive) {
-                        // TODO: 登出逻辑
+                // 閫€鍑虹櫥褰?                Section {
+                    Button("閫€鍑虹櫥褰?, role: .destructive) {
+                        // TODO: 鐧诲嚭閫昏緫
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
-            .navigationTitle("个人中心")
+            .navigationTitle("涓汉涓績")
             .sheet(isPresented: $showingEditProfile) {
                 EditProfileView()
             }
@@ -109,27 +108,27 @@ struct EditProfileView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("基本信息") {
-                    TextField("昵称", text: $nickname)
+                Section("鍩烘湰淇℃伅") {
+                    TextField("鏄电О", text: $nickname)
                 }
-                Section("学习目标") {
-                    Picker("学习方向", selection: $learningDirection) {
+                Section("瀛︿範鐩爣") {
+                    Picker("瀛︿範鏂瑰悜", selection: $learningDirection) {
                         ForEach(LearningDirection.allCases, id: \.self) { dir in
                             Text(dir.rawValue).tag(dir)
                         }
                     }
-                    TextField("目标考试", text: $targetExam)
+                    TextField("鐩爣鑰冭瘯", text: $targetExam)
                 }
             }
-            .navigationTitle("编辑资料")
+            .navigationTitle("缂栬緫璧勬枡")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("保存") {
-                        // TODO: 保存逻辑
+                    Button("淇濆瓨") {
+                        // TODO: 淇濆瓨閫昏緫
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消", role: .cancel) {}
+                    Button("鍙栨秷", role: .cancel) {}
                 }
             }
         }

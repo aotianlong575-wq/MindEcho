@@ -1,5 +1,10 @@
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
+#if canImport(AppKit)
+import AppKit
+#endif
 
 /// OCR 识别服务
 /// 使用 Apple Vision 框架识别图片中的文字
@@ -9,7 +14,15 @@ final class OCRService {
     /// 识别图片中的文字
     /// - Parameter image: 输入图片
     /// - Returns: 识别出的文字内容
-    func recognizeText(from image: UIImage) async throws -> String {
+    #if canImport(UIKit)
+    typealias PlatformImage = UIImage
+    #elseif canImport(AppKit)
+    typealias PlatformImage = NSImage
+    #else
+    typealias PlatformImage = Data  // fallback
+    #endif
+
+    func recognizeText(from image: PlatformImage) async throws -> String {
         // TODO: 集成 Vision 框架
         // 1. 创建 VNImageRequestHandler
         // 2. 使用 VNRecognizeTextRequest 识别文字

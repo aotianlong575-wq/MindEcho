@@ -1,16 +1,17 @@
-import SwiftUI
+﻿import SwiftUI
+import MindEchoCore
 import PhotosUI
+import MindEchoCore
 
-/// 知识采集中心
-/// 支持手动录入、OCR 识别、文档导入三种方式
-struct KnowledgeCaptureView: View {
+/// 鐭ヨ瘑閲囬泦涓績
+/// 鏀寔鎵嬪姩褰曞叆銆丱CR 璇嗗埆銆佹枃妗ｅ鍏ヤ笁绉嶆柟寮?struct KnowledgeCaptureView: View {
     @State private var selectedTab: CaptureTab = .manual
     @State private var selectedPhoto: PhotosPickerItem?
 
     var body: some View {
         NavigationStack {
             VStack {
-                Picker("采集方式", selection: $selectedTab) {
+                Picker("閲囬泦鏂瑰紡", selection: $selectedTab) {
                     ForEach(CaptureTab.allCases, id: \.self) { tab in
                         Label(tab.rawValue, systemImage: tab.icon).tag(tab)
                     }
@@ -27,15 +28,15 @@ struct KnowledgeCaptureView: View {
                     DocumentImportView()
                 }
             }
-            .navigationTitle("知识采集")
+            .navigationTitle("鐭ヨ瘑閲囬泦")
         }
     }
 }
 
 enum CaptureTab: String, CaseIterable {
-    case manual = "手动"
+    case manual = "鎵嬪姩"
     case ocr = "OCR"
-    case document = "文档"
+    case document = "鏂囨。"
 
     var icon: String {
         switch self {
@@ -46,7 +47,7 @@ enum CaptureTab: String, CaseIterable {
     }
 }
 
-// MARK: - 手动输入表单
+// MARK: - 鎵嬪姩杈撳叆琛ㄥ崟
 struct ManualInputForm: View {
     @State private var title = ""
     @State private var content = ""
@@ -56,24 +57,24 @@ struct ManualInputForm: View {
 
     var body: some View {
         Form {
-            Section("基本信息") {
-                TextField("标题", text: $title)
+            Section("鍩烘湰淇℃伅") {
+                TextField("鏍囬", text: $title)
                 TextEditor(text: $content)
                     .frame(minHeight: 120)
             }
 
-            Section("分类") {
-                Picker("类别", selection: $category) {
+            Section("鍒嗙被") {
+                Picker("绫诲埆", selection: $category) {
                     ForEach(KnowledgeCategory.allCases, id: \.self) { cat in
                         Text(cat.rawValue).tag(cat)
                     }
                 }
             }
 
-            Section("标签") {
+            Section("鏍囩") {
                 HStack {
-                    TextField("添加标签", text: $tagText)
-                    Button("添加") {
+                    TextField("娣诲姞鏍囩", text: $tagText)
+                    Button("娣诲姞") {
                         if !tagText.isEmpty {
                             tags.append(tagText)
                             tagText = ""
@@ -83,8 +84,8 @@ struct ManualInputForm: View {
                 TagCloudView(tags: $tags)
             }
 
-            Button("保存知识点") {
-                // TODO: 调用保存逻辑
+            Button("淇濆瓨鐭ヨ瘑鐐?) {
+                // TODO: 璋冪敤淇濆瓨閫昏緫
             }
             .frame(maxWidth: .infinity)
             .buttonStyle(.borderedProminent)
@@ -92,7 +93,7 @@ struct ManualInputForm: View {
     }
 }
 
-// MARK: - OCR 采集视图
+// MARK: - OCR 閲囬泦瑙嗗浘
 struct OCRCaptureView: View {
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var recognizedText: String = ""
@@ -103,8 +104,8 @@ struct OCRCaptureView: View {
                 VStack(spacing: 12) {
                     Image(systemName: "doc.text.viewfinder")
                         .font(.system(size: 48))
-                    Text("选择图片进行 OCR 识别")
-                    Text("支持教材、PPT、板书、试题")
+                    Text("閫夋嫨鍥剧墖杩涜 OCR 璇嗗埆")
+                    Text("鏀寔鏁欐潗銆丳PT銆佹澘涔︺€佽瘯棰?)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -123,29 +124,27 @@ struct OCRCaptureView: View {
     }
 }
 
-// MARK: - 文档导入视图
+// MARK: - 鏂囨。瀵煎叆瑙嗗浘
 struct DocumentImportView: View {
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "doc.badge.plus")
                 .font(.system(size: 48))
 
-            Text("拖放文件或点击导入")
+            Text("鎷栨斁鏂囦欢鎴栫偣鍑诲鍏?)
                 .font(.headline)
 
-            Text("支持 PDF、DOCX、TXT、Markdown 格式")
+            Text("鏀寔 PDF銆丏OCX銆乀XT銆丮arkdown 鏍煎紡")
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            // TODO: 实现文件选择器
-        }
+            // TODO: 瀹炵幇鏂囦欢閫夋嫨鍣?        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
     }
 }
 
-// MARK: - 标签云
-struct TagCloudView: View {
+// MARK: - 鏍囩浜?struct TagCloudView: View {
     @Binding var tags: [String]
 
     var body: some View {
@@ -168,7 +167,7 @@ struct TagCloudView: View {
     }
 }
 
-/// 流式布局 (简化实现)
+/// 娴佸紡甯冨眬 (绠€鍖栧疄鐜?
 struct FlowLayout: Layout {
     var spacing: CGFloat = 8
 

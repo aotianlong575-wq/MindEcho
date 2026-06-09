@@ -1,8 +1,8 @@
-import SwiftUI
+﻿import SwiftUI
+import MindEchoCore
 
-/// 首页看板
-/// 展示今日复习计划、学习统计、遗忘预警
-struct DashboardView: View {
+/// 棣栭〉鐪嬫澘
+/// 灞曠ず浠婃棩澶嶄範璁″垝銆佸涔犵粺璁°€侀仐蹇橀璀?struct DashboardView: View {
     @State private var todayReviewPlan: ReviewPlan?
     @State private var riskNodes: [KnowledgeNode] = []
 
@@ -10,13 +10,13 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    // 今日复习卡片
+                    // 浠婃棩澶嶄範鍗＄墖
                     TodayReviewCard(plan: todayReviewPlan)
 
-                    // 遗忘预警列表
+                    // 閬楀繕棰勮鍒楄〃
                     RiskAlertSection(nodes: riskNodes)
 
-                    // 学习统计概览
+                    // 瀛︿範缁熻姒傝
                     StatsOverviewCard()
                 }
                 .padding()
@@ -24,7 +24,7 @@ struct DashboardView: View {
             .navigationTitle("MindEcho")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { /* 同步 */ }) {
+                    Button(action: { /* 鍚屾 */ }) {
                         Image(systemName: "arrow.triangle.2.circlepath")
                     }
                 }
@@ -33,18 +33,17 @@ struct DashboardView: View {
     }
 }
 
-// MARK: - 子组件
-struct TodayReviewCard: View {
+// MARK: - 瀛愮粍浠?struct TodayReviewCard: View {
     let plan: ReviewPlan?
 
     var body: some View {
         VStack(alignment: .leading) {
-            Label("今日复习", systemImage: "calendar.badge.clock")
+            Label("浠婃棩澶嶄範", systemImage: "calendar.badge.clock")
                 .font(.headline)
             if let plan = plan {
-                Text("\(plan.items.count) 个知识点待复习")
+                Text("\(plan.items.count) 涓煡璇嗙偣寰呭涔?)
             } else {
-                Text("暂无复习计划")
+                Text("鏆傛棤澶嶄範璁″垝")
                     .foregroundColor(.secondary)
             }
         }
@@ -60,7 +59,7 @@ struct RiskAlertSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("遗忘预警", systemImage: "exclamationmark.triangle.fill")
+            Label("閬楀繕棰勮", systemImage: "exclamationmark.triangle.fill")
                 .font(.headline)
                 .foregroundColor(.orange)
 
@@ -96,13 +95,13 @@ struct RiskAlertSection: View {
 struct StatsOverviewCard: View {
     var body: some View {
         VStack(alignment: .leading) {
-            Label("学习统计", systemImage: "chart.line.uptrend.xyaxis")
+            Label("瀛︿範缁熻", systemImage: "chart.line.uptrend.xyaxis")
                 .font(.headline)
 
             HStack {
-                StatItem(title: "知识点", value: "0")
-                StatItem(title: "掌握度", value: "0%")
-                StatItem(title: "连续学习", value: "0天")
+                StatItem(title: "鐭ヨ瘑鐐?, value: "0")
+                StatItem(title: "鎺屾彙搴?, value: "0%")
+                StatItem(title: "杩炵画瀛︿範", value: "0澶?)
             }
         }
         .padding()

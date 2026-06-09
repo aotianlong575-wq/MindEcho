@@ -1,8 +1,7 @@
-import SwiftUI
+﻿import SwiftUI
+import MindEchoCore
 
-/// 记忆图谱 — 知识节点与关系的可视化
-/// 支持缩放、拖拽、搜索、筛选
-struct MemoryGraphView: View {
+/// 璁板繂鍥捐氨 鈥?鐭ヨ瘑鑺傜偣涓庡叧绯荤殑鍙鍖?/// 鏀寔缂╂斁銆佹嫋鎷姐€佹悳绱€佺瓫閫?struct MemoryGraphView: View {
     @State private var searchText = ""
     @State private var selectedCategory: KnowledgeCategory?
     @State private var scale: CGFloat = 1.0
@@ -11,11 +10,10 @@ struct MemoryGraphView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // 搜索栏
-                HStack {
+                // 鎼滅储鏍?                HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
-                    TextField("搜索知识点...", text: $searchText)
+                    TextField("鎼滅储鐭ヨ瘑鐐?..", text: $searchText)
                         .textFieldStyle(.plain)
                 }
                 .padding(10)
@@ -23,10 +21,9 @@ struct MemoryGraphView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.horizontal)
 
-                // 分类筛选
-                ScrollView(.horizontal, showsIndicators: false) {
+                // 鍒嗙被绛涢€?                ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        FilterChip(title: "全部", isSelected: selectedCategory == nil) {
+                        FilterChip(title: "鍏ㄩ儴", isSelected: selectedCategory == nil) {
                             selectedCategory = nil
                         }
                         ForEach(KnowledgeCategory.allCases, id: \.self) { cat in
@@ -39,10 +36,10 @@ struct MemoryGraphView: View {
                 }
                 .padding(.vertical, 8)
 
-                // 图谱画布
+                // 鍥捐氨鐢诲竷
                 ZStack {
-                    // TODO: 使用 SpriteKit 或 Canvas 绘制知识图谱
-                    // 节点表示知识点，连线表示关系
+                    // TODO: 浣跨敤 SpriteKit 鎴?Canvas 缁樺埗鐭ヨ瘑鍥捐氨
+                    // 鑺傜偣琛ㄧず鐭ヨ瘑鐐癸紝杩炵嚎琛ㄧず鍏崇郴
                     GraphCanvasView()
                         .scaleEffect(scale)
                         .offset(offset)
@@ -62,13 +59,13 @@ struct MemoryGraphView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemGroupedBackground))
             }
-            .navigationTitle("记忆图谱")
+            .navigationTitle("璁板繂鍥捐氨")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button("按时间排序", action: {})
-                        Button("按难度排序", action: {})
-                        Button("显示聚类", action: {})
+                        Button("鎸夋椂闂存帓搴?, action: {})
+                        Button("鎸夐毦搴︽帓搴?, action: {})
+                        Button("鏄剧ず鑱氱被", action: {})
                     } label: {
                         Image(systemName: "ellipsis.circle")
                     }
@@ -96,16 +93,16 @@ struct FilterChip: View {
     }
 }
 
-// MARK: - 图谱画布 (占位)
+// MARK: - 鍥捐氨鐢诲竷 (鍗犱綅)
 struct GraphCanvasView: View {
     var body: some View {
         VStack(spacing: 12) {
             Image(systemName: "point.3.connected.trianglepath.dotted")
                 .font(.system(size: 60))
                 .foregroundColor(.secondary)
-            Text("知识图谱将在此展示")
+            Text("鐭ヨ瘑鍥捐氨灏嗗湪姝ゅ睍绀?)
                 .foregroundColor(.secondary)
-            Text("添加知识点后，节点与关联关系将自动生成")
+            Text("娣诲姞鐭ヨ瘑鐐瑰悗锛岃妭鐐逛笌鍏宠仈鍏崇郴灏嗚嚜鍔ㄧ敓鎴?)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

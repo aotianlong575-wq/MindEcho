@@ -1,50 +1,47 @@
-#if os(visionOS)
+﻿#if os(visionOS)
 import SwiftUI
+import MindEchoCore
 import RealityKit
+import MindEchoCore
 
-/// 记忆宇宙 — visionOS 核心创新模块
-/// 知识点以三维空间形式展示
-/// 用户通过手势交互查看知识节点、路径、成长轨迹、记忆热力图
+/// 璁板繂瀹囧畽 鈥?visionOS 鏍稿績鍒涙柊妯″潡
+/// 鐭ヨ瘑鐐逛互涓夌淮绌洪棿褰㈠紡灞曠ず
+/// 鐢ㄦ埛閫氳繃鎵嬪娍浜や簰鏌ョ湅鐭ヨ瘑鑺傜偣銆佽矾寰勩€佹垚闀胯建杩广€佽蹇嗙儹鍔涘浘
 struct MemoryUniverseView: View {
     @State private var selectedNode: KnowledgeNode?
     @State private var showNodeDetail = false
 
     var body: some View {
         RealityView { content in
-            // 创建根实体
-            let root = Entity()
+            // 鍒涘缓鏍瑰疄浣?            let root = Entity()
             root.name = "MemoryUniverseRoot"
             content.add(root)
 
-            // TODO: 构建 3D 知识空间
-            // 1. 创建星球节点（每个星球代表一个知识聚类）
-            // 2. 创建连接线（表示知识关联路径）
-            // 3. 添加粒子效果（记忆活跃度）
-            // 4. 设置光照和材质
-        } update: { content in
-            // 响应数据更新
+            // TODO: 鏋勫缓 3D 鐭ヨ瘑绌洪棿
+            // 1. 鍒涘缓鏄熺悆鑺傜偣锛堟瘡涓槦鐞冧唬琛ㄤ竴涓煡璇嗚仛绫伙級
+            // 2. 鍒涘缓杩炴帴绾匡紙琛ㄧず鐭ヨ瘑鍏宠仈璺緞锛?            // 3. 娣诲姞绮掑瓙鏁堟灉锛堣蹇嗘椿璺冨害锛?            // 4. 璁剧疆鍏夌収鍜屾潗璐?        } update: { content in
+            // 鍝嶅簲鏁版嵁鏇存柊
         }
         .gesture(
             SpatialTapGesture()
                 .targetedToAnyEntity()
                 .onEnded { value in
-                    // 点击节点 -> 显示详情
+                    // 鐐瑰嚮鑺傜偣 -> 鏄剧ず璇︽儏
                     showNodeDetail = true
                 }
         )
         .ornament(attachmentAnchor: .scene(.bottom)) {
-            // 底部控制栏
-            HStack(spacing: 24) {
-                Button(action: { /* 缩放重置 */ }) {
+            // 搴曢儴鎺у埗鏍?            HStack(spacing: 24) {
+                Button(action: { /* 缂╂斁閲嶇疆 */ }) {
                     Image(systemName: "arrow.counterclockwise")
                 }
-                Button(action: { /* 搜索 */ }) {
+                Button(action: { /* 鎼滅储 */ }) {
                     Image(systemName: "magnifyingglass")
                 }
-                Button(action: { /* 筛选 */ }) {
+                Button(action: { /* 绛涢€?*/ }) {
                     Image(systemName: "line.3.horizontal.decrease")
                 }
-                Button(action: { /* 热力图 */ }) {
+                Button(action: { /* 鐑姏鍥?*/ }) {
                     Image(systemName: "flame.fill")
                 }
             }
@@ -52,13 +49,13 @@ struct MemoryUniverseView: View {
             .glassBackgroundEffect()
         }
         .sheet(isPresented: $showNodeDetail) {
-            // 节点详情弹窗
+            // 鑺傜偣璇︽儏寮圭獥
             NodeDetailPanel(node: selectedNode)
         }
     }
 }
 
-// MARK: - 节点详情面板
+// MARK: - 鑺傜偣璇︽儏闈㈡澘
 struct NodeDetailPanel: View {
     let node: KnowledgeNode?
 
@@ -72,8 +69,8 @@ struct NodeDetailPanel: View {
 
                 Divider()
 
-                // 关联节点
-                Label("关联知识", systemImage: "link")
+                // 鍏宠仈鑺傜偣
+                Label("鍏宠仈鐭ヨ瘑", systemImage: "link")
                     .font(.headline)
                 ForEach(node.relatedNodes.prefix(5), id: \.nodeId) { rel in
                     HStack {
@@ -94,17 +91,17 @@ struct NodeDetailPanel: View {
 }
 
 #else
-// 非 visionOS 平台的占位实现
-import SwiftUI
+// 闈?visionOS 骞冲彴鐨勫崰浣嶅疄鐜?import SwiftUI
+import MindEchoCore
 
 struct MemoryUniverseView: View {
     var body: some View {
         VStack {
             Image(systemName: "visionpro")
                 .font(.system(size: 60))
-            Text("记忆宇宙")
+            Text("璁板繂瀹囧畽")
                 .font(.title)
-            Text("需要 visionOS 设备")
+            Text("闇€瑕?visionOS 璁惧")
                 .foregroundColor(.secondary)
         }
     }

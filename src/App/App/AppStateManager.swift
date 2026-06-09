@@ -1,8 +1,8 @@
-import Foundation
+﻿import Foundation
+import MindEchoCore
 
-/// 全局应用状态管理器
-/// 管理用户会话、同步状态、系统配置
-final class AppStateManager: ObservableObject {
+/// 鍏ㄥ眬搴旂敤鐘舵€佺鐞嗗櫒
+/// 绠＄悊鐢ㄦ埛浼氳瘽銆佸悓姝ョ姸鎬併€佺郴缁熼厤缃?final class AppStateManager: ObservableObject {
     @Published var isAuthenticated: Bool = false
     @Published var currentUser: User?
     @Published var syncStatus: SyncStatus = .idle

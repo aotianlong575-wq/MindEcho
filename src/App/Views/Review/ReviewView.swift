@@ -1,7 +1,8 @@
-import SwiftUI
+﻿import SwiftUI
+import MindEchoCore
 
-/// 智能复习
-/// 每日自动生成复习计划，AI 随机出题
+/// 鏅鸿兘澶嶄範
+/// 姣忔棩鑷姩鐢熸垚澶嶄範璁″垝锛孉I 闅忔満鍑洪
 struct ReviewView: View {
     @State private var currentQuestionIndex = 0
     @State private var selectedAnswer: String?
@@ -11,37 +12,37 @@ struct ReviewView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                // 复习进度
+                // 澶嶄範杩涘害
                 ReviewProgressBar(current: currentQuestionIndex + 1, total: 10)
 
-                // 题目卡片
+                // 棰樼洰鍗＄墖
                 ScrollView {
                     VStack(spacing: 20) {
                         QuestionCard(
                             type: .multipleChoice,
-                            question: "艾宾浩斯遗忘曲线表明，遗忘的进程是？",
+                            question: "鑹惧娴╂柉閬楀繕鏇茬嚎琛ㄦ槑锛岄仐蹇樼殑杩涚▼鏄紵",
                             options: [
-                                "A. 先快后慢",
-                                "B. 先慢后快",
-                                "C. 匀速遗忘",
-                                "D. 随机遗忘"
+                                "A. 鍏堝揩鍚庢參",
+                                "B. 鍏堟參鍚庡揩",
+                                "C. 鍖€閫熼仐蹇?,
+                                "D. 闅忔満閬楀繕"
                             ],
                             selectedAnswer: $selectedAnswer,
                             showResult: showResult,
-                            correctAnswer: "A. 先快后慢"
+                            correctAnswer: "A. 鍏堝揩鍚庢參"
                         )
 
                         if showResult {
                             HStack(spacing: 20) {
                                 if isCorrect == true {
-                                    Label("回答正确！", systemImage: "checkmark.circle.fill")
+                                    Label("鍥炵瓟姝ｇ‘锛?, systemImage: "checkmark.circle.fill")
                                         .foregroundColor(.green)
                                 } else {
-                                    Label("回答错误", systemImage: "xmark.circle.fill")
+                                    Label("鍥炵瓟閿欒", systemImage: "xmark.circle.fill")
                                         .foregroundColor(.red)
                                 }
 
-                                Button("下一题") {
+                                Button("涓嬩竴棰?) {
                                     withAnimation {
                                         selectedAnswer = nil
                                         showResult = false
@@ -52,10 +53,10 @@ struct ReviewView: View {
                             }
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                         } else {
-                            Button("提交答案") {
+                            Button("鎻愪氦绛旀") {
                                 withAnimation {
                                     showResult = true
-                                    isCorrect = selectedAnswer == "A. 先快后慢"
+                                    isCorrect = selectedAnswer == "A. 鍏堝揩鍚庢參"
                                 }
                             }
                             .disabled(selectedAnswer == nil)
@@ -65,13 +66,12 @@ struct ReviewView: View {
                     .padding()
                 }
             }
-            .navigationTitle("智能复习")
+            .navigationTitle("鏅鸿兘澶嶄範")
         }
     }
 }
 
-// MARK: - 进度条
-struct ReviewProgressBar: View {
+// MARK: - 杩涘害鏉?struct ReviewProgressBar: View {
     let current: Int
     let total: Int
 
@@ -88,7 +88,7 @@ struct ReviewProgressBar: View {
     }
 }
 
-// MARK: - 题目卡片
+// MARK: - 棰樼洰鍗＄墖
 struct QuestionCard: View {
     let type: QuestionType
     let question: String
@@ -99,19 +99,19 @@ struct QuestionCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // 题型标签
+            // 棰樺瀷鏍囩
             Label(type.rawValue, systemImage: typeIcon)
                 .font(.caption)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .background(Capsule().fill(.blue.opacity(0.1)))
 
-            // 题目
+            // 棰樼洰
             Text(question)
                 .font(.body)
                 .padding(.vertical, 8)
 
-            // 选项
+            // 閫夐」
             if let options = options {
                 ForEach(options, id: \.self) { option in
                     Button {

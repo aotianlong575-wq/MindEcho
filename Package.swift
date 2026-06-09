@@ -23,16 +23,21 @@ let package = Package(
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.10.0"),
     ],
     targets: [
+        // Core 共享层 — Models + Services（可在 macOS CI 上编译测试）
         .target(
             name: "MindEchoCore",
-            dependencies: ["Alamofire"],
-            path: "src/MindEcho/Services"
+            dependencies: [],
+            path: "src/Core"
         ),
+        // App 层 — UI 视图（需要 Xcode + iOS/visionOS SDK）
         .executableTarget(
             name: "MindEchoApp",
-            dependencies: ["MindEchoCore", "Kingfisher"],
-            path: "src/MindEcho"
+            dependencies: [
+                "MindEchoCore",
+            ],
+            path: "src/App"
         ),
+        // 测试 — 仅依赖 Core 层（无需 iOS SDK）
         .testTarget(
             name: "MindEchoTests",
             dependencies: ["MindEchoCore"],
