@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "name": "MindEcho",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "extensions.autoUpdate": true,
+    "extensions.ignoreRecommendations": false,
+    "files.associations": {
+      "*.swift": "swift"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "sswg.swift-lang",
+      "vknabel.vscode-swiftformat",
+      "vadimcn.vscode-lldb",
+      "eamodio.gitlens"
+    ]
+  }
+}

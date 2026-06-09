@@ -1,0 +1,49 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.rulers": [100],
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.build": true,
+    "**/DerivedData": true,
+    "**/xcuserdata": true
+  },
+  "swift.path": "/usr/bin/swift",
+  "swift.swiftEnvironmentVariables": {
+    "DEVELOPER_DIR": "/Applications/Xcode.app"
+  },
+  "swift.languageServer": {
+    "enabled": true
+  },
+  "swiftformat.onlyEnableOnSwiftPMProjects": false,
+  "lldb.adapterType": "bundled",
+  "lldb.displayFormat": "hex",
+  "markdown.preview.breaks": true,
+  "[swift]": {
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "vknabel.vscode-swiftformat"
+  },
+  "[markdown]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 100
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "type": "text"
+    },
+    "FIXME": {
+      "icon": "tools",
+      "type": "text-and-comment"
+    }
+  },
+  "material-icon-theme.folders.associations": {
+    "ViewModels": "viewmodel",
+    "Services": "api",
+    "CoreML": "robot",
+    "RealityKit": "vr",
+    "MindEcho": "app"
+  },
+  "workbench.iconTheme": "material-icon-theme"
+}

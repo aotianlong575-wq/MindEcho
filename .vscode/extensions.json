@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "sswg.swift-lang",
+    "vknabel.vscode-swiftformat",
+    "vadimcn.vscode-lldb",
+    "eamodio.gitlens",
+    "shd101wyy.markdown-preview-enhanced",
+    "gruntfuggly.todo-tree",
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-mermaid",
+    "pkief.material-icon-theme"
+  ]
+}
