@@ -1,134 +1,169 @@
-﻿import SwiftUI
+import SwiftUI
 import MindEchoCore
 
-/// 涓汉涓績
+/// 个人中心
 struct ProfileView: View {
+    @EnvironmentObject var appState: AppStateManager
+    @StateObject private var vm = UserViewModel()
     @State private var showingEditProfile = false
+    @State private var showingLogoutAlert = false
 
     var body: some View {
         NavigationStack {
             List {
-                // 澶村儚涓庡熀鏈俊鎭?                Section {
-                    HStack(spacing: 16) {
-                        AsyncImage(url: nil) { image in
-                            image.resizable()
-                        } placeholder: {
-                            Circle()
-                                .fill(.blue.opacity(0.2))
-                                .overlay(
-                                    Image(systemName: "person.fill")
-                                        .foregroundColor(.blue)
-                                )
-                        }
-                        .frame(width: 60, height: 60)
-                        .clipShape(Circle())
+                Section { profileHeader }
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("鐢ㄦ埛鍚?)
-                                .font(.headline)
-                            Text("dev@mindecho.local")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-                        Button("缂栬緫") {
-                            showingEditProfile = true
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
+                Section {
+                    LabeledContent("学习方向",
+                                   value: vm.currentUser?.learningDirection.rawValue ?? "未设置")
+                    LabeledContent("目标考试",
+                                   value: vm.currentUser?.targetExam ?? "未设置")
+                    LabeledContent("学习目标",
+                                   value: vm.currentUser?.learningGoal ?? "未设置")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("资料完整度").font(.caption).foregroundColor(.secondary)
+                        ProgressView(value: Double(vm.profileCompletionPercent), total: 100)
+                            .tint(vm.profileCompletionPercent < 50 ? .orange : .green)
                     }
-                    .padding(.vertical, 4)
-                }
+                } header: { Text("学习设置") }
 
-                // 瀛︿範璁剧疆
-                Section("瀛︿範璁剧疆") {
+                Section {
+                    Button { } label: {
+                        Label("导出学习数据", systemImage: "square.and.arrow.up")
+                    }
+                    Button { } label: {
+                        Label("同步到 iCloud", systemImage: "icloud")
+                    }
+                } header: { Text("数据管理") }
+
+                Section {
+                    Toggle(isOn: $vm.isDarkMode) {
+                        Label("深色模式", systemImage: "moon.fill")
+                    }
+                    Toggle(isOn: $vm.isOfflineMode) {
+                        Label("离线模式", systemImage: "wifi.slash")
+                    }
+                    Toggle(isOn: $vm.enableNotifications) {
+                        Label("复习提醒", systemImage: "bell.fill")
+                    }
+                } header: { Text("系统设置") }
+
+                Section {
                     HStack {
-                        Text("瀛︿範鏂瑰悜")
-                        Spacer()
-                        Text("璁＄畻鏈虹瀛?)
-                            .foregroundColor(.secondary)
+                        Text("版本"); Spacer()
+                        Text("1.0.0 (Beta)").foregroundColor(.secondary)
                     }
-                    HStack {
-                        Text("鐩爣鑰冭瘯")
-                        Spacer()
-                        Text("鏈缃?)
-                            .foregroundColor(.secondary)
+                    Link(destination: URL(string: "https://mindecho.local/terms")!) {
+                        Label("用户协议", systemImage: "doc.text")
                     }
-                }
-
-                // 鏁版嵁绠＄悊
-                Section("鏁版嵁绠＄悊") {
-                    Button("瀵煎嚭鏁版嵁") {}
-                    Button("鍚屾鍒颁簯绔?) {}
-                    Button("娓呴櫎缂撳瓨") {}
-                        .foregroundColor(.orange)
-                }
-
-                // 绯荤粺璁剧疆
-                Section("绯荤粺璁剧疆") {
-                    Toggle("娣辫壊妯″紡", isOn: .constant(false))
-                    Toggle("绂荤嚎妯″紡", isOn: .constant(false))
-                    NavigationLink("鏃犻殰纰嶈缃?) {}
-                    NavigationLink("闅愮璁剧疆") {}
-                }
-
-                // 鍏充簬
-                Section("鍏充簬") {
-                    HStack {
-                        Text("鐗堟湰")
-                        Spacer()
-                        Text("1.0.0")
-                            .foregroundColor(.secondary)
+                    Link(destination: URL(string: "https://mindecho.local/privacy")!) {
+                        Label("隐私政策", systemImage: "hand.raised")
                     }
-                    NavigationLink("鐢ㄦ埛鍗忚") {}
-                    NavigationLink("闅愮鏀跨瓥") {}
-                }
+                } header: { Text("关于") }
 
-                // 閫€鍑虹櫥褰?                Section {
-                    Button("閫€鍑虹櫥褰?, role: .destructive) {
-                        // TODO: 鐧诲嚭閫昏緫
+                Section {
+                    Button(role: .destructive) {
+                        showingLogoutAlert = true
+                    } label: {
+                        Label("退出登录", systemImage: "rectangle.portrait.and.arrow.right")
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
-            .navigationTitle("涓汉涓績")
+            .navigationTitle("个人中心")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button { vm.syncEditForm(); showingEditProfile = true } label: {
+                        Text("编辑")
+                    }
+                }
+            }
             .sheet(isPresented: $showingEditProfile) {
-                EditProfileView()
+                EditProfileSheet(vm: vm)
+            }
+            .confirmationDialog("确定退出登录？", isPresented: $showingLogoutAlert,
+                                titleVisibility: .visible) {
+                Button("退出登录", role: .destructive) {
+                    vm.logout()
+                    appState.isAuthenticated = false
+                }
+                Button("取消", role: .cancel) {}
             }
         }
     }
+
+    private var profileHeader: some View {
+        HStack(spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(LinearGradient(colors: [.blue, .purple],
+                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 56, height: 56)
+                Text(String(vm.userDisplayName.prefix(1)).uppercased())
+                    .font(.title3.bold()).foregroundColor(.white)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(vm.userDisplayName).font(.headline)
+                Text(vm.userDisplayEmail).font(.caption).foregroundColor(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
+    }
 }
 
-struct EditProfileView: View {
-    @State private var nickname = ""
-    @State private var learningDirection: LearningDirection = .computerScience
-    @State private var targetExam = ""
+// MARK: - 编辑资料弹窗
+struct EditProfileSheet: View {
+    @ObservedObject var vm: UserViewModel
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("鍩烘湰淇℃伅") {
-                    TextField("鏄电О", text: $nickname)
+                Section("基本信息") {
+                    HStack {
+                        Text("昵称")
+                        TextField("请输入昵称", text: $vm.editNickname)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
-                Section("瀛︿範鐩爣") {
-                    Picker("瀛︿範鏂瑰悜", selection: $learningDirection) {
-                        ForEach(LearningDirection.allCases, id: \.self) { dir in
-                            Text(dir.rawValue).tag(dir)
+                Section("学习目标") {
+                    Picker("学习方向", selection: $vm.editLearningDirection) {
+                        ForEach(LearningDirection.allCases, id: \.self) { d in
+                            Text(d.rawValue).tag(d)
                         }
                     }
-                    TextField("鐩爣鑰冭瘯", text: $targetExam)
-                }
-            }
-            .navigationTitle("缂栬緫璧勬枡")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("淇濆瓨") {
-                        // TODO: 淇濆瓨閫昏緫
+                    HStack {
+                        Text("目标考试")
+                        TextField("如：考研、雅思、PMP", text: $vm.editTargetExam)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("学习目标").font(.caption).foregroundColor(.secondary)
+                        TextEditor(text: $vm.editLearningGoal)
+                            .frame(minHeight: 80)
+                            .overlay(RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.secondary.opacity(0.3)))
                     }
                 }
+                if let err = vm.errorMessage {
+                    Label(err, systemImage: "exclamationmark.triangle.fill")
+                        .foregroundColor(.red)
+                }
+            }
+            .navigationTitle("编辑资料")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("鍙栨秷", role: .cancel) {}
+                    Button("取消") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("保存") {
+                        Task {
+                            await vm.updateProfile()
+                            if vm.errorMessage == nil { dismiss() }
+                        }
+                    }
+                    .disabled(!vm.profileChanged || vm.isLoading)
                 }
             }
         }
