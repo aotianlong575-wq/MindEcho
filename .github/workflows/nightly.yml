@@ -16,10 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode 16
+      - name: Show Xcode Version
         run: |
-          sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
           xcodebuild -version
+          swift --version
 
       - name: Cache SPM
         uses: actions/cache@v4

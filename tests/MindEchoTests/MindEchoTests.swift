@@ -149,7 +149,7 @@ final class KnowledgeGraphEngineTests: XCTestCase {
         // nodeC 独立
 
         let clusters = engine.clusterNodes()
-        XCTAssertEqual(clusters.count, 2) // AB 一个群，C 单独一个群
+        XCTAssertEqual(clusters.count, 2, "AB 一个群，C 单独一个群")
     }
 
     // MARK: - 关联推荐测试
